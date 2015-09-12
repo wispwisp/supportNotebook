@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+{% load staticfiles %}
+
+<html>
+
+  <head>
+    <title>Шаблоны ответа пользователю</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'responseTemplates/style.css' %}" />
+  </head>
+
+  <body>
+    <div id="megamain">
+      
+      <div id="column1">
+	<p id="titel">Tags to choose</p>
+	{% if tags %}
+    	<form method="get" action="{% url 'responseTemplates:templates' %}">
+      	  {% for tag in tags %}
+      	  <input type="checkbox" name="tag" value="{{ tag.name }}">{{ tag.name }}<br></input>
+      	  {% endfor %}
+      	  <input type="submit" value="{{ button_value }}" />
+    	</form>
+    	{% else %}
+    	<div>No tags created</div>
+    	{% endif %}
+      </div>
+
+      <div class="submain">
+	<p id="titel">Templates</p>
+	<br>
+	{% if templates %}
+    	{% for template in templates %}
+	<div>
+    	  <div id="kapitel">
+	    {% for tag in template.tags.all %}
+	    <span>{{ tag }}, </span>
+	    {% endfor %}
+	  </div>
+    	  <div id="umr3">
+	    {% for p in template.paragraph_set.all %}
+	    <p>{{ p.text }}</p>
+	    {% if p.image %}<img src="{% static p.image.url %}"/>{% endif %}
+	    {% endfor %}
+	  </div>
+	  <br>
+	</div>
+    	{% endfor %}
+    	{% else %}
+    	<div id="kapitel">Нет статей с указаными тегами</div>
+    	{% endif %}
+      </div>
+
+    </div>
+  </body>
+</html>
